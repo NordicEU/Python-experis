@@ -39,6 +39,9 @@ productNames[0] = "Purple tea"
 # print(min(productNames))
 # print(max(productNames))
 
-print(productNames[1:4:2])
+# print(productNames[1:4:2])
 
-print(productNames[::-1])
+# print(productNames[::-1])
+
+print("White tea" in productNames)
+print("orange tea" not in productNames)
