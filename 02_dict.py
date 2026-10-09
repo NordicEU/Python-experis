@@ -20,3 +20,5 @@ Line
 
 for key, value in product.items():
     print(f"{key} -> {value}")
+
+
