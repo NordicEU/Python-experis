@@ -1,106 +1,132 @@
-class Creature:
-    """Represents a general creature living in the aquarium."""
+class AquariumCreature:
+    """The parent class for anything chilling in the aquarium."""
 
-    def __init__(self, name, food_level=0):
+    def __init__(self, name, tummy_points=0):
         self.name = name
-        self.food_level = food_level
+        self.tummy_points = tummy_points
 
-    def needs_food(self):
+    def is_tummy_rumbling(self):
+        """Every creature must decide whether its tummy is making noises."""
         raise NotImplementedError(
-            "Subclasses must implement the needs_food method"
+            "This creature has forgotten how hunger works!"
         )
 
-    def absorb_food(self, food_amount):
+    def food_suck(self, snack_attack):
+        """Each creature must know how to slurp up its food."""
         raise NotImplementedError(
-            "Subclasses must implement the absorb_food method"
+            "This creature does not know how to eat. Very suspicious."
         )
 
     def __str__(self):
-        if self.needs_food():
+        # Politely ask the creature whether it wants snacks.
+        if self.is_tummy_rumbling():
             return f"The {self.name} needs food"
 
         return f"The {self.name} doesn't need food"
 
 
-class Fish(Creature):
-    """A fish needs food below level 10 and absorbs 60%."""
+class Fish(AquariumCreature):
+    """A fishy little creature that absorbs 60% of its food."""
 
-    FOOD_THRESHOLD = 10
-    ABSORPTION_RATE = 0.60
+    FULL_TUMMY_NUMBER = 10
+    FOOD_SUCK_POWER = 0.60
 
-    def needs_food(self):
-        return self.food_level < self.FOOD_THRESHOLD
+    def is_tummy_rumbling(self):
+        # Below 10 tummy points means the fish demands room service.
+        return self.tummy_points < self.FULL_TUMMY_NUMBER
 
-    def absorb_food(self, food_amount):
-        absorbed_amount = food_amount * self.ABSORPTION_RATE
-        self.food_level += absorbed_amount
+    def food_suck(self, snack_attack):
+        # Fish are messy eaters, so only 60% enters the fish dimension.
+        actual_yum_yum = snack_attack * self.FOOD_SUCK_POWER
+        self.tummy_points += actual_yum_yum
 
 
-class Plant(Creature):
-    """A plant needs food below level 15 and absorbs 50%."""
+class Plant(AquariumCreature):
+    """A suspiciously hungry plant that absorbs 50% of its food."""
 
-    FOOD_THRESHOLD = 15
-    ABSORPTION_RATE = 0.50
+    FULL_TUMMY_NUMBER = 15
+    FOOD_SUCK_POWER = 0.50
 
-    def needs_food(self):
-        return self.food_level < self.FOOD_THRESHOLD
+    def is_tummy_rumbling(self):
+        # Yes, aquarium plants have imaginary stomachs now.
+        return self.tummy_points < self.FULL_TUMMY_NUMBER
 
-    def absorb_food(self, food_amount):
-        absorbed_amount = food_amount * self.ABSORPTION_RATE
-        self.food_level += absorbed_amount
+    def food_suck(self, snack_attack):
+        # Half becomes plant fuel. The other half vanishes into the wet void.
+        actual_yum_yum = snack_attack * self.FOOD_SUCK_POWER
+        self.tummy_points += actual_yum_yum
 
 
 class Aquarium:
-    """Stores and feeds creatures in the aquarium."""
+    """The glass kingdom where fish and plants demand snacks."""
 
     def __init__(self):
-        self.creatures = []
+        self.wet_little_roommates = []
 
-    def add_creature(self, creature):
-        self.creatures.append(creature)
+    def add_creature(self, new_water_friend):
+        """Adds another hungry resident to the glass kingdom."""
+        self.wet_little_roommates.append(new_water_friend)
 
-    def feed(self, total_food):
-        hungry_creatures = [
-            creature
-            for creature in self.creatures
-            if creature.needs_food()
+    def feed(self, giant_food_blob):
+        """Divides food equally among creatures that are still hungry."""
+
+        hungry_gang = [
+            water_friend
+            for water_friend in self.wet_little_roommates
+            if water_friend.is_tummy_rumbling()
         ]
 
-        if not hungry_creatures:
-            print("No creatures need food")
+        if not hungry_gang:
+            print("Nobody wants food. The aquarium rejects your generosity.")
             return
 
-        food_per_creature = total_food / len(hungry_creatures)
+        # Fairness has entered the aquarium.
+        tiny_food_blob = giant_food_blob / len(hungry_gang)
 
-        for creature in hungry_creatures:
-            creature.absorb_food(food_per_creature)
+        for hungry_goblin in hungry_gang:
+            hungry_goblin.food_suck(tiny_food_blob)
 
-    def display_state(self):
-        for creature in self.creatures:
-            print(creature)
+    def show_aquarium_drama(self):
+        """Reports the current hunger drama."""
+        for water_friend in self.wet_little_roommates:
+            print(water_friend)
 
 
 def main():
-    aquarium = Aquarium()
+    glass_fish_mansion = Aquarium()
 
-    aquarium.add_creature(Fish("goldfish"))
-    aquarium.add_creature(Fish("clownfish"))
-    aquarium.add_creature(Plant("seaweed"))
-    aquarium.add_creature(Plant("kelp"))
+    # The fish begin with 3 tummy points so the result matches
+    # the assignment's example after the first feeding.
+    goldfish_bob = Fish("goldfish", tummy_points=3)
+    clownfish_bonald = Fish("clownfish", tummy_points=3)
+
+    # The plants begin completely snackless. A tragic beginning.
+    seaweed_steve = Plant("seaweed")
+    kelp_kelvin = Plant("kelp")
+
+    # Everybody gets thrown into the fancy glass puddle.
+    glass_fish_mansion.add_creature(goldfish_bob)
+    glass_fish_mansion.add_creature(clownfish_bonald)
+    glass_fish_mansion.add_creature(seaweed_steve)
+    glass_fish_mansion.add_creature(kelp_kelvin)
 
     print("Before feeding:")
-    aquarium.display_state()
+    glass_fish_mansion.show_aquarium_drama()
 
     print("\nAfter feeding with 50:")
     print("Feeding with 50")
-    aquarium.feed(50)
-    aquarium.display_state()
+
+    # Release the first food blob!
+    glass_fish_mansion.feed(50)
+    glass_fish_mansion.show_aquarium_drama()
 
     print("\nAfter feeding with 80:")
     print("Feeding with 80")
-    aquarium.feed(80)
-    aquarium.display_state()
 
+    # A second, significantly chunkier food blob approaches.
+    glass_fish_mansion.feed(80)
+    glass_fish_mansion.show_aquarium_drama()
 
 if __name__ == "__main__":
+    # The aquarium drama officially begins.
     main()
