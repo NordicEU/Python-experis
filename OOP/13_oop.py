@@ -1,4 +1,4 @@
-from Product import Product
+
 
 class Product:
     name = ""
