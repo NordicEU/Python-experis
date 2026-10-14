@@ -34,7 +34,7 @@ class CowsAndBulls:
                 cows += 1
             else:
                 target_remaining.append(self.target[i])
-                guess_remaining.append# Count bulls from remaining digits
+                guess_remaining.append(number[i])# Count bulls from remaining digits
         for digit in guess_remaining:
             if digit in target_remaining:
                 bulls += 1
@@ -55,7 +55,7 @@ def main():
     print("Try to guess it!")
 
     # Uncomment while testing
-    print(f"DEBUG: {game.target}")
+    # print(f"DEBUG: {game.target}")
 
     while not game.finished:
 
